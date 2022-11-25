@@ -9,3 +9,15 @@ const printStateButton: HTMLElement =
 const isLoggedIn$ = new Subject<boolean>();
 
 fromEvent(loginButton, 'click').subscribe(() => isLoggedIn$.next(true));
+fromEvent(logoutButton, 'click').subscribe(() => isLoggedIn$.next(false));
+
+//Navigation Bar
+isLoggedIn$.subscribe(
+  (isLoggedIn) => (loggedInSpan.innerText = isLoggedIn.toString())
+);
+
+//Buttons
+isLoggedIn$.subscribe((isLoggedIn) => {
+  logoutButton.style.display = isLoggedIn ? 'block' : 'none';
+  loginButton.style.display = !isLoggedIn ? 'block' : 'none';
+});
