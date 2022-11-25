@@ -1,4 +1,4 @@
-import { fromEvent, Subject } from 'rxjs';
+import { fromEvent, BehaviorSubject } from 'rxjs';
 
 const loggedInSpan: HTMLElement = document.querySelector('span#logged-in');
 const loginButton: HTMLElement = document.querySelector('button#login');
@@ -6,7 +6,7 @@ const logoutButton: HTMLElement = document.querySelector('button#logout');
 const printStateButton: HTMLElement =
   document.querySelector('button#print-state');
 
-const isLoggedIn$ = new Subject<boolean>();
+const isLoggedIn$ = new BehaviorSubject<boolean>(false); //the initial state is false
 
 fromEvent(loginButton, 'click').subscribe(() => isLoggedIn$.next(true));
 fromEvent(logoutButton, 'click').subscribe(() => isLoggedIn$.next(false));
@@ -20,4 +20,8 @@ isLoggedIn$.subscribe(
 isLoggedIn$.subscribe((isLoggedIn) => {
   logoutButton.style.display = isLoggedIn ? 'block' : 'none';
   loginButton.style.display = !isLoggedIn ? 'block' : 'none';
+});
+
+fromEvent(printStateButton, 'click').subscribe((isLoggedIn) => {
+  () => console.log(`User is logged in: ${isLoggedIn$.value}`);
 });
